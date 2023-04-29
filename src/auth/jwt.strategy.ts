@@ -3,17 +3,17 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 
-// const cookieExtractor = function (req) {
-//     let token = null;
-//     if (req && req.cookies) {
-//       token = req.cookies["access_token"];
-//     }
-//     console.log(token);
-//     if (token) {
-//       return token.access_token;
-//     }
-//     return null;
-//   };
+const cookieExtractor = function (req) {
+    let token = null;
+    if (req && req.cookies) {
+      token = req.cookies["access_token"];
+    }
+    console.log(token);
+    if (token) {
+      return token.access_token;
+    }
+    return null;
+  };
   type TokenPayload = {
     id: number;
     username: string;
@@ -23,7 +23,7 @@ import { Injectable } from '@nestjs/common';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
       ignoreExpiration: false,
       secretOrKey: "MYSECRET",
     });

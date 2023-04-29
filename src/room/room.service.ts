@@ -10,13 +10,13 @@ export class RoomService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Room) private roomRepository: Repository<Room>,
   ) {}
-//   async createRoom() {
-//     const users = await this.userRepository.findBy({
+//    async createSingleRoom() {
+//      const users = await this.roomRepository.create({
 //       id: Not(userId),
 //     });
 //     return users;
-//   }
-  async getRoom(user1Id: number, user2Id: number) {
+//     }
+  async getSingleRoom(user1Id: number, user2Id: number) {
     const room = await this.roomRepository.find({
       where: [
         {
@@ -29,5 +29,6 @@ export class RoomService {
         },
       ],
     });
+    return room 
   }
 }

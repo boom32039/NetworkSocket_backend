@@ -12,13 +12,13 @@ export class Room {
   @PrimaryGeneratedColumn()
   roomId: number;
 
-  @Column()
+  @Column({ nullable: true })
   roomName: string;
 
-  @Column()
+  @Column({ nullable: true })
   user1Id: number;
 
-  @Column()
+  @Column({ nullable: true })
   user2Id: number;
 
   @Column()
