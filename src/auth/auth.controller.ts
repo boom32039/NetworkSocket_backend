@@ -1,5 +1,15 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Patch, Param, Post, Response, Delete, UseGuards, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  Param,
+  Post,
+  Response,
+  Delete,
+  UseGuards,
+  Res,
+} from '@nestjs/common';
 // eslint-disable-next-line prettier/prettier
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './auth.service';
@@ -19,8 +29,13 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto, @Response() res) {
     const user = await this.authService.validateLogin(loginDto);
     const token = await this.authService.login(loginDto);
-    const secure = (process.env.NODE_ENV === "production")? true : false ; 
-    res.cookie("access_token", token, { httpsOnly: true, secure: secure  });
+    const secure = process.env.NODE_ENV === 'production';
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: secure,
+      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      sameSite: 'none',
+    });
     return res.status(200).send({
       user: user,
       token: token,
@@ -39,12 +54,8 @@ export class AuthController {
   @Delete('logout')
   @ApiResponse({ status: 201, description: 'Logout Successful.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  async logout(@Res() res ) {
+  async logout(@Res() res) {
     res.clearCookie('access_token');
     return res.status(200).send('Logout success');
   }
 }
-
-
-
-
