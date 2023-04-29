@@ -27,9 +27,6 @@ export class ChatService {
 
   async getMessages(roomId: number) {
     return await this.chatRepository.find({
-      select: {
-        sender: { password: false },
-      },
       relations: {
         sender: true,
       },
