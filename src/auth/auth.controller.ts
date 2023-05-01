@@ -34,7 +34,7 @@ export class AuthController {
       httpOnly: true,
       secure: secure,
       expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      sameSite: 'none',
+      sameSite: 'lax',
     });
     return res.status(200).send({
       user: user,
