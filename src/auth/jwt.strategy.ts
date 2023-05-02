@@ -8,7 +8,6 @@ const cookieExtractor = function (req) {
     if (req && req.cookies) {
       token = req.cookies["access_token"];
     }
-    console.log(token);
     if (token) {
       return token.access_token;
     }

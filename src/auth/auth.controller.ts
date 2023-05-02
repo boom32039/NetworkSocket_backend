@@ -32,7 +32,7 @@ export class AuthController {
     const secure = process.env.NODE_ENV === 'production';
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: secure,
+      secure: false,
       expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       sameSite: 'lax',
     });

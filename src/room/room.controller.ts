@@ -27,7 +27,6 @@ export class RoomController {
   async getSingleRoom(@Body() getSingleRoomIdDto : GetSingleRoomDto, @Request() req ) {
     const senderId = req.user['id'];
     const room = await this.roomService.getSingleRoomId(senderId , getSingleRoomIdDto.receiverId);
-    console.log(room)
     if (!room) return await this.roomService.createSingleRoom(senderId, getSingleRoomIdDto.receiverId);
     return room;
     

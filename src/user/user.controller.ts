@@ -15,7 +15,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async getClients(@Request() req) {
-    console.log(req);
     const userId = req.user['id'] ; 
     const users = await this.userService.getClients(userId);
     return users ; 

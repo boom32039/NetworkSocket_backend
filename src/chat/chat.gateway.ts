@@ -1,5 +1,7 @@
 import {
   OnGatewayInit,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -9,13 +11,14 @@ import { ChatService } from './chat.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Chat } from './entities/chat.entity';
 import { Logger } from '@nestjs/common';
-
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: true,
   },
 })
-export class ChatGateway implements OnGatewayInit {
+export class ChatGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(private chatService: ChatService) {}
 
   @WebSocketServer() server: Server;
@@ -24,6 +27,16 @@ export class ChatGateway implements OnGatewayInit {
 
   afterInit(server: any) {
     this.logger.log('Initialized!');
+  }
+
+  handleDisconnect(client: Socket) {
+    console.log(`Disconnected: ${client.id}`);
+    //Do stuffs
+  }
+
+  handleConnection(client: Socket, ...args: any[]) {
+    console.log(`Connected ${client.id}`);
+    client.emit('joinroom', true);
   }
 
   @SubscribeMessage('joinRoom')
@@ -36,6 +49,11 @@ export class ChatGateway implements OnGatewayInit {
   handleRoomLeave(client: Socket, room: string) {
     client.leave(room);
     client.emit('leftRoom', room);
+  }
+
+  @SubscribeMessage('test')
+  handleTest(client: Socket, room: string) {
+    console.log(room);
   }
 
   @SubscribeMessage('sendMessage')
